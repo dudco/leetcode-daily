@@ -1,0 +1,17 @@
+{
+  "python.envFile": "${workspaceFolder}/.env",
+  "python.terminal.launchArgs": [
+    "-B"
+  ],
+  "terminal.integrated.env.osx": {
+    "PYTHONDONTWRITEBYTECODE": "1"
+  },
+  "chat.disableAIFeatures": true,
+  "python-envs.pythonProjects": [
+    {
+      "path": ".",
+      "envManager": "ms-python.python:pyenv",
+      "packageManager": "ms-python.python:pip"
+    }
+  ]
+}

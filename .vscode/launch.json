@@ -1,0 +1,19 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Run test.py in current file folder",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${fileDirname}/test.py",
+      "cwd": "${fileDirname}",
+      "console": "integratedTerminal",
+      "pythonArgs": [
+        "-B"
+      ],
+      "env": {
+        "PYTHONDONTWRITEBYTECODE": "1"
+      }
+    }
+  ]
+}

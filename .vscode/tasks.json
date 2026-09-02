@@ -1,0 +1,25 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Run test.py in current file folder",
+      "type": "shell",
+      "command": "${command:python.interpreterPath}",
+      "args": [
+        "-B",
+        "${fileDirname}/test.py"
+      ],
+      "options": {
+        "cwd": "${fileDirname}",
+        "env": {
+          "PYTHONDONTWRITEBYTECODE": "1"
+        }
+      },
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "problemMatcher": []
+    }
+  ]
+}
