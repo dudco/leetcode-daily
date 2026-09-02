@@ -1,0 +1,54 @@
+name: daily draft
+
+# LeetCode 데일리는 매일 00:00 UTC = 09:00 KST 정각에 바뀐다.
+# UTC는 서머타임이 없으므로 이 시각은 사시사철 고정이다.
+#
+# 다만 GitHub의 예약 실행은 정시에 오지 않는다. 큐에 넣고 여유가 생길 때
+# 돌리는 방식이라 몇 분~수십 분 밀리고, 부하가 심하면 그 회차를 통째로
+# 건너뛰기도 한다. 매시 정각(분 == 0)이 가장 붐비므로 어중간한 분에 건다.
+#
+# 그래서 하루 세 번 건다. 초안 생성기는 그날 폴더가 이미 있으면 아무것도
+# 하지 않으므로, 첫 번째가 제대로 돌면 나머지 둘은 빈손으로 끝난다.
+# 급하면 Actions 탭에서 "Run workflow", 또는 로컬에서
+# `python3 tools/new_daily.py`.
+
+on:
+  schedule:
+    - cron: '7 0 * * *'     # 09:07 KST — 데일리가 바뀌자마자
+    - cron: '38 1 * * *'    # 10:38 KST — 위가 밀렸거나 씹혔을 때
+    - cron: '23 4 * * *'    # 13:23 KST — 마지막 보험
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: daily-draft
+  cancel-in-progress: false
+
+jobs:
+  draft:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: 초안 생성
+        id: gen
+        run: python3 tools/new_daily.py
+
+      - name: 커밋
+        if: steps.gen.outputs.created == '1'
+        run: |
+          git config user.name  "daily-draft bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          if git diff --cached --quiet; then
+            echo "바뀐 파일 없음"
+            exit 0
+          fi
+          git commit -m "draft: ${{ steps.gen.outputs.folder }}"
+          git push
