@@ -30,7 +30,17 @@ Constraints:
 - s and t consist of English letters.
 
 ## 해석 및 풀이 방식
+dp[i][j] = s의 앞 i개 문자로 t의 앞 j개 문자를 만드는 방법의 수
 
+s[i-1] != t[j-1]
+
+→ 현재 s 문자를 버린다.
+
+s[i-1] == t[j-1]
+
+→ 현재 s 문자를 버리거나
+
+→ 현재 s 문자를 사용하거나
 ### 알고리즘
 
 ### 시간복잡도:
@@ -38,3 +48,16 @@ Constraints:
 ### 공간복잡도:
 
 ## 다른사람들의 개쩌는답
+```
+dp = [0] * (len(t) + 1)
+dp[0] = 1
+
+for c in s:
+    for j in range(len(t), 0, -1):
+        if c == t[j - 1]:
+            dp[j] += dp[j - 1]
+
+return dp[len(t)]
+```
+
+1차원 최적화도 가능
