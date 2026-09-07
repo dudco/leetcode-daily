@@ -12,7 +12,7 @@
 └── test.py      문제에 적힌 Example 케이스만
 ```
 
-`README.md`에서 자동으로 채워지는 건 제목·링크·`### 문제 설명` 까지다.
+`README.md`에서 자동으로 채워지는 건 제목·링크·난이도·`### 문제 설명` 까지다.
 그 아래 `## 해석 및 풀이 방식`, `### 알고리즘`, `### 시간복잡도:`,
 `### 공간복잡도:`, `## 다른사람들의 개쩌는답` 은 빈 칸으로 남는다.
 
@@ -41,6 +41,22 @@ python3 tools/new_daily.py --slug two-sum  # 특정 문제
 그날 폴더가 이미 있으면 아무것도 하지 않으므로 중복 걱정은 없다.
 LeetCode가 러너 IP를 막아 실패하는 날이 있을 수 있어서 5번까지 재시도한다.
 그래도 실패하면 Actions 탭에서 "Run workflow"를 누르거나 로컬에서 돌리면 된다.
+
+### Discord 알림 설정
+
+새 문제를 커밋하고 GitHub에 푸시한 뒤 Discord 채널로 제목, 난이도, 문제 링크,
+생성된 커밋 링크를 보낸다. Discord Bot이나 API Token은 필요 없고, 채널 전용
+Webhook URL 하나만 있으면 된다.
+
+1. Discord 서버에서 **서버 설정 → 연동(Integrations) → 웹후크(Webhooks) → 새 웹후크**로 이동한다.
+2. 알림을 받을 채널을 선택하고 **웹후크 URL 복사**를 누른다.
+3. GitHub 저장소에서 **Settings → Secrets and variables → Actions → New repository secret**으로 이동한다.
+4. 이름은 `DISCORD_WEBHOOK_URL`, 값은 복사한 전체 Webhook URL로 저장한다.
+5. **Actions → daily draft → Run workflow**로 수동 실행해 알림을 확인한다. 단, 오늘 폴더가 이미 있으면 중복 생성을 막기 위해 알림도 보내지 않는다.
+
+Webhook URL은 해당 채널에 메시지를 보낼 수 있는 비밀 자격 증명이다. `.env`, 코드,
+README 또는 Actions 로그에 직접 넣지 말고 GitHub Secret에만 저장한다. URL이 유출되면
+Discord에서 해당 Webhook을 삭제하고 새로 만들어 Secret 값을 교체한다.
 
 > 예약 실행은 저장소에 60일간 아무 활동이 없으면 GitHub가 꺼버린다.
 > 매일 커밋이 쌓이는 한 그럴 일은 없다.

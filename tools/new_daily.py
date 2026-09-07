@@ -228,6 +228,8 @@ def build_test(detail, body_md):
 
 README_TMPL = """## [{fid}. {title}]({link})
 
+**난이도:** {difficulty}
+
 ### 문제 설명
 {body}
 
@@ -243,12 +245,25 @@ README_TMPL = """## [{fid}. {title}]({link})
 """
 
 
-def build_readme(detail, date, body_md):
-    link = ("https://leetcode.com/problems/%s/description/"
+DIFFICULTY_LABELS = {
+    "Easy": "🟢 Easy",
+    "Medium": "🟡 Medium",
+    "Hard": "🔴 Hard",
+}
+
+
+def problem_link(detail, date):
+    return ("https://leetcode.com/problems/%s/description/"
             "?envType=daily-question&envId=%s" % (detail["titleSlug"], date))
+
+
+def build_readme(detail, date, body_md):
     return README_TMPL.format(
         fid=detail["questionFrontendId"], title=detail["title"],
-        link=link, body=body_md)
+        link=problem_link(detail, date),
+        difficulty=DIFFICULTY_LABELS.get(
+            detail.get("difficulty"), detail.get("difficulty") or "Unknown"),
+        body=body_md)
 
 
 # --------------------------------------------------------------------------- #
@@ -297,7 +312,11 @@ def main():
     existing = [p for p in root.glob(name + "*") if p.is_dir()]
     if existing and not args.force:
         print("이미 있음: %s — 건너뜀" % existing[0].name)
-        _emit_output(created="", folder=existing[0].name, skipped="1")
+        _emit_output(created="", folder=existing[0].name, skipped="1",
+                     problem_id=detail.get("questionFrontendId", ""),
+                     difficulty=detail.get("difficulty", ""),
+                     title=detail.get("title", ""),
+                     problem_url=problem_link(detail, date))
         return 0
 
     target = existing[0] if existing else root / name
@@ -318,7 +337,11 @@ def main():
         print("  씀    %s" % fname)
 
     print("만듦: %s  (%s)" % (target.name, detail.get("difficulty", "")))
-    _emit_output(created="1", folder=target.name, skipped="")
+    _emit_output(created="1", folder=target.name, skipped="",
+                 problem_id=detail.get("questionFrontendId", ""),
+                 difficulty=detail.get("difficulty", ""),
+                 title=detail.get("title", ""),
+                 problem_url=problem_link(detail, date))
     return 0
 
 

@@ -29,6 +29,8 @@ concurrency:
 jobs:
   draft:
     runs-on: ubuntu-latest
+    env:
+      DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
     steps:
       - uses: actions/checkout@v4
 
@@ -41,6 +43,7 @@ jobs:
         run: python3 tools/new_daily.py
 
       - name: 커밋
+        id: commit
         if: steps.gen.outputs.created == '1'
         run: |
           git config user.name  "daily-draft bot"
@@ -52,3 +55,19 @@ jobs:
           fi
           git commit -m "draft: ${{ steps.gen.outputs.folder }}"
           git push
+          echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+
+      - name: Discord 알림
+        if: steps.gen.outputs.created == '1' && env.DISCORD_WEBHOOK_URL != ''
+        env:
+          LEETCODE_TITLE: ${{ steps.gen.outputs.title }}
+          LEETCODE_PROBLEM_URL: ${{ steps.gen.outputs.problem_url }}
+          LEETCODE_DIFFICULTY: ${{ steps.gen.outputs.difficulty }}
+          LEETCODE_FOLDER: ${{ steps.gen.outputs.folder }}
+          LEETCODE_PROBLEM_ID: ${{ steps.gen.outputs.problem_id }}
+          LEETCODE_COMMIT_URL: ${{ github.server_url }}/${{ github.repository }}/commit/${{ steps.commit.outputs.sha }}
+        run: python3 tools/notify_discord.py
+
+      - name: Discord 설정 안내
+        if: steps.gen.outputs.created == '1' && env.DISCORD_WEBHOOK_URL == ''
+        run: echo "::warning::DISCORD_WEBHOOK_URL Secret이 없어 Discord 알림을 건너뜁니다."
