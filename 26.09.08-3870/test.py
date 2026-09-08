@@ -12,5 +12,9 @@ class SolutionTests(unittest.TestCase):
         s = solution.Solution()
         self.assertEqual(s.countCommas(998), 0)
 
+    def test_case3(self):
+        s = solution.Solution()
+        self.assertEqual(s.countCommas(2019), 1020)
+
 if __name__ == '__main__':
     unittest.main()

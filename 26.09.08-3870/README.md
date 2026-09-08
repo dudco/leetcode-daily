@@ -30,6 +30,7 @@ Constraints:
 - 1 <= n <= 10^5
 
 ## 해석 및 풀이 방식
+10으로 몇번나눌 수 있는지 확인 후 
 
 ### 알고리즘
 
@@ -38,3 +39,16 @@ Constraints:
 ### 공간복잡도:
 
 ## 다른사람들의 개쩌는답
+https://leetcode.com/problems/count-commas-in-range/solutions/8508339/1-by-rovele4569-vp7c/?envType=daily-question&envId=2026-09-08
+
+
+If n≥1,000, the count of numbers containing a comma is n−999.
+If n<1,000, the count is 0.
+
+```
+class Solution(object):
+    def countCommas(self, n):
+        return (n > 999) * (n - 999)
+```
+
+이런방법이
