@@ -1,19 +1,50 @@
 import unittest
+from collections import deque
 
 import solution
 
 
 class SolutionTests(unittest.TestCase):
-    # 입력이 ListNode/TreeNode 다. 아래 리스트를 노드로 바꾸는
-    #   헬퍼를 직접 만든 뒤 주석을 풀 것.
+    def build_tree(self, elem: list[int]):
+        if not elem:
+            return None
+        
+        it = iter(elem)
+        val = next(it)
 
-    # def test_case1(self):
-    #     s = solution.Solution()
-    #     self.assertEqual(s.averageOfSubtree([4, 8, 5, 0, 1, None, 6]), 5)
+        if val is None:
+            return None
+        
+        root = solution.TreeNode(val)
+        q = deque([root])
 
-    # def test_case2(self):
-    #     s = solution.Solution()
-    #     self.assertEqual(s.averageOfSubtree([1]), 1)
+        for val in it:
+            n = q.popleft()
+            if val is not None:
+                n.left = solution.TreeNode(val)
+                q.append(n.left)
+
+            try:
+                val = next(it)
+            except StopIteration:
+                break
+
+            if val is not None:
+                n.right = solution.TreeNode(val)
+                q.append(n.right)
+                
+
+        return root
+            
+
+        
+    def test_case1(self):
+        s = solution.Solution()
+        self.assertEqual(s.averageOfSubtree(self.build_tree([4, 8, 5, 0, 1, None, 6])), 5)
+
+    def test_case2(self):
+        s = solution.Solution()
+        self.assertEqual(s.averageOfSubtree(self.build_tree([1])), 1)
 
 if __name__ == '__main__':
     unittest.main()
