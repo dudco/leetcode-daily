@@ -28,11 +28,44 @@ Constraints:
 - 0 <= digits[i] <= 9
 
 ## 해석 및 풀이 방식
+주어진 배열의 숫자들을 이용해서 짝수인 3자리숫자를 만드는 경우의 수
+
+전부 다 확인해보면 될 것 같은데 마지막 숫자가 짝수일때만 확인하면됨
+
+근데 이것만으로는 시간초과가 뜸 -> 맨 앞에 0이 못오게 막으면 통과함
 
 ### 알고리즘
+- 브루트포스
 
-### 시간복잡도:
+### 시간복잡도: O(n^3)
 
-### 공간복잡도:
+### 공간복잡도: O(1)
 
 ## 다른사람들의 개쩌는답
+대부분 브루트포스로 해결. 근데 난 DFS 식으로 좀 복잡하게 한 느낌
+
+그냥 for문 3개 중복으로 쓰는게 더 보기엔 편함
+
+```python
+class Solution:
+    def totalNumbers(self, digits: List[int]) -> int:
+        n = len(digits)
+        vis = [False] * 1000
+        ans = 0
+
+        for i in range(n):
+            if digits[i] == 0:
+                continue
+            for j in range(n):
+                if j == i:
+                    continue
+                for k in range(n):
+                    if k == i or k == j or digits[k] % 2 != 0:
+                        continue
+                    x = digits[i] * 100 + digits[j] * 10 + digits[k]
+                    if not vis[x]:
+                        vis[x] = True
+                        ans += 1
+
+        return ans
+```
