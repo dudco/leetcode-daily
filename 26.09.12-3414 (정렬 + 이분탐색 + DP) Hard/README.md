@@ -31,11 +31,22 @@ Constraints:
 - 1 <= weight_i <= 10^9
 
 ## 해석 및 풀이 방식
+1. l을 기준으로 정렬
+2. i를 선택했을 때 다음에 선택가능한 idx 계산 (21:28)
+3. 현재 interval 을 선택하는 경우와 선택하지 않는 경우 중 더 나은 경우의 수 선택
 
 ### 알고리즘
+- 정렬
+- 이분탐색
+- DP
 
-### 시간복잡도:
+### 시간복잡도: O(nlogn + 4n)
 
 ### 공간복잡도:
 
 ## 다른사람들의 개쩌는답
+https://leetcode.com/problems/maximum-score-of-non-overlapping-intervals/solutions/8516767/interval-dp-one-min-for-the-tiebreak-on-uddbc/?envType=daily-question&envId=2026-09-12
+
+접근은 비슷한데 코드가 더 간결 
+
+겁나어렵네 ;;
