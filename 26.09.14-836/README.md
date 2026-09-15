@@ -28,8 +28,16 @@ Constraints:
 - rec1 and rec2 represent a valid rectangle with a non-zero area.
 
 ## 해석 및 풀이 방식
+이거 쉽게 아는 수식이있는데 기억이 안난다.
+
+4개의 점 중 하나라도 사각형 안에 있으면 overlab 됨.
+
+rec1 사각형 안에 rec2가 포함되는 경우
+
+rec2 사각형 안에 rec1이 포함되는 경우
 
 ### 알고리즘
+- 수학
 
 ### 시간복잡도:
 
